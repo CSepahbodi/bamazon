@@ -1,3 +1,4 @@
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'C1y05@176#4';
 -- Drops the database if it currently exists --
 DROP DATABASE IF EXISTS bamazon_db;
 
@@ -26,3 +27,5 @@ VALUES ("Alfonsina Storni: Selected Poems", "Books", 14.00, 10),
 ("Versace Sunglasses", "Accesories", 169.99, 34),
 ("Infrared Laser Tag Guns", "Toys", 149.99, 15),
 ("Raspberry Pi 3 Model B", "Electronics", 37.50, 20);
+
+SELECT * FROM products; 
