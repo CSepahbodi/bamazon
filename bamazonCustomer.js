@@ -3,12 +3,13 @@ var inquirer = require("inquirer");
 
 var connection = mysql.createConnection({
     host: "localhost",
-    port: 3307,
+    port: 3306,
     user: "root",
     password: "C1y05@176#4",
     database: "bamazon_db"
 });
 
+// function to display the items in the database into the CLI
 function displayItems() {
     connection.query("SELECT * FROM products", function (err, results) {
         results.forEach(function (e) {
@@ -23,6 +24,7 @@ function displayItems() {
     });
 }
 
+//function to update the products through the CLI
 function updateItem(id, quantity, buyCount) {
     var itemID = id;
     var stockQunatity = quantity;
@@ -34,6 +36,7 @@ function updateItem(id, quantity, buyCount) {
     });
 }
 
+//
 function promptUser() {
     inquirer
         .prompt([{
