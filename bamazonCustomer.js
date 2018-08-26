@@ -1,6 +1,8 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 
+
+//setup the connection to the database through mySQL- initialize mySQL router port number and enter specicic bamazon database.
 var connection = mysql.createConnection({
     host: "localhost",
     port: 3306,
@@ -36,7 +38,7 @@ function updateItem(id, quantity, buyCount) {
     });
 }
 
-//
+// function to prompt user in CLI to purchase specific products.
 function promptUser() {
     inquirer
         .prompt([{
@@ -47,10 +49,11 @@ function promptUser() {
             {
                 name: 'buyCount',
                 type: 'input',
-                message: `How many units of would you like? `
+                message: `How many units would you like? `
             }
         ])
         .then(function (res) {
+            //make sure that the user has selected a proper item from the product list. If not then prompt user to enter one of the ID's available.
             connection.query("SELECT * FROM products WHERE item_id = ?", [res.buyID], function (err, results) {
                 if (err) throw err;
                 if (results.length === 0 || res.buyCount == 0) {
@@ -61,7 +64,6 @@ function promptUser() {
                 else if (results[0].stock_quantity >= res.buyCount) {
                     console.log(`Your total is ${results[0].price * res.buyCount}`);
                     console.log(`Deducting ${res.buyCount} from item stock.`);
-                    //updateItem(res.buyID, results[0].stock_quantity, res.buyCount);
                     var stockQuantity = results[0].stock_quantity;
                     var purchaseCount = res.buyCount;
                     var setQuantity = stockQuantity - purchaseCount;
@@ -70,12 +72,15 @@ function promptUser() {
                     });
                     exit();
                 } else {
-                    console.log(`Out of Stock! We have ${results[0].stock_quantity} items left.`);
+                    //tell the user that if the stock is depleted that the item is no longer available.
+                    console.log(`So sorry but we are out of stock! We only have ${results[0].stock_quantity} items left!`);
                     exit();
                 }
             });
         });
 }
+
+//function to complete the program when the user is finishe purchasing or to continue shopping through CLI
 
 function exit() {
     inquirer
@@ -95,6 +100,7 @@ function exit() {
         });
 };
 
+//Start the engines and display the items so user can purchase products... YAY CAPITALISM!
 connection.connect(function (err) {
     if (err) throw err;
     displayItems();
